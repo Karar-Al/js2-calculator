@@ -32,6 +32,10 @@ function formSubmit (ev) {
   calculationEl.innerText = ''
 }
 
+/**
+ * @param {MouseEvent | KeyboardEvent} _ 
+ * @param {boolean} keyboard 
+ */
 function plus (_, keyboard = false) {
   const val = input[0].value
 
@@ -44,6 +48,10 @@ function plus (_, keyboard = false) {
   input[0].value = ''
 }
 
+/**
+ * @param {MouseEvent | KeyboardEvent} _ 
+ * @param {boolean} keyboard 
+ */
 function minus (_, keyboard = false) {
   const val = input[0].value
 
