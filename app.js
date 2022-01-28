@@ -29,7 +29,7 @@ function formSubmit (ev) {
   simpleCalc(calculationArr)
   
   calculationArr = []
-  resetElements([calculationEl])
+  calculationEl.innerText = ''
 }
 
 function plus (_, keyboard = false) {
@@ -38,6 +38,7 @@ function plus (_, keyboard = false) {
   if (keyboard) calculationArr.push(Number(val), '+')
   else if (calculationArr.length === 0) calculationArr.push(Number(val))
   else calculationArr.push('+', Number(val))
+
   updateCalculationEl(calculationArr)
 
   input[0].value = ''
@@ -49,6 +50,7 @@ function minus (_, keyboard = false) {
   if (keyboard) calculationArr.push(Number(val), '-')
   else if (calculationArr.length === 0) calculationArr.push(Number(val))
   else calculationArr.push('-', Number(val))
+
   updateCalculationEl(calculationArr)
 
   input[0].value = ''
@@ -79,17 +81,6 @@ function simpleCalc (arr) {
   }
 
   resultEl.innerText = res
-}
-
-/**
- * @param {Array<HTMLElement>} arr 
- */
-function resetElements (arr) {
-  for (let index = 0; index < arr.length; index++) {
-    const element = arr[index]
-
-    element.innerText = ''
-  }
 }
 
 /**
