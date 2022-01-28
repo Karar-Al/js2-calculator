@@ -13,7 +13,7 @@ $('#form [name="minus"]').on('click', minus)
 
 /**
  * @this {HTMLFormElement}
- * @param {SubmitEvent} ev 
+ * @param {SubmitEvent} ev
  */
 function formSubmit (ev) {
   ev.preventDefault() // Refresha inte sidan.
@@ -21,11 +21,13 @@ function formSubmit (ev) {
   if (input[0].value.length > 0) {
     const num = Number(input[0].value)
     calculationArr.push(num)
-    input[0].value = ''
     runTts(num) // Extra
   }
 
-  if (calculationArr)
+  input[0].value = ''
+
+  // Quit early, there's nothing to calculate.
+  if (!calculationArr.length > 0) return
 
   // Do the thing.
   simpleCalc(calculationArr)
@@ -35,23 +37,26 @@ function formSubmit (ev) {
 }
 
 /**
- * @param {MouseEvent | KeyboardEvent} _ 
- * @param {boolean} keyboard 
+ * @param {MouseEvent | KeyboardEvent} _
+ * @param {boolean} keyboard
  */
-function plus (_, keyboard = false) {
+function plus (_/*, keyboard = false*/) {
   const val = input[0].value
+  const num = Number(val)
 
   let ttsText = ''
 
-  if (keyboard) {
-    calculationArr.push(Number(val), '+')
-    ttsText = `${val} plus` // Extra
-  } else if (calculationArr.length === 0) {
-    calculationArr.push(Number(val))
-    ttsText = val // Extra
+  // if (keyboard) {
+  //   calculationArr.push(num, '+')
+  //   ttsText = `${num} plus` // Extra
+  // } else
+
+  if (calculationArr.length === 0) {
+    calculationArr.push(num)
+    ttsText = num // Extra
   } else {
-    calculationArr.push('+', Number(val))
-    ttsText = `plus ${val}` // Extra
+    calculationArr.push('+', num)
+    ttsText = `Plus ${num}.` // Extra
   }
 
   updateCalculationEl(calculationArr)
@@ -62,23 +67,26 @@ function plus (_, keyboard = false) {
 }
 
 /**
- * @param {MouseEvent | KeyboardEvent} _ 
- * @param {boolean} keyboard 
+ * @param {MouseEvent | KeyboardEvent} _
+ * @param {boolean} keyboard
  */
-function minus (_, keyboard = false) {
+function minus (_ /*, keyboard = false*/) {
   const val = input[0].value
+  const num = Number(val)
 
   let ttsText = ''
 
-  if (keyboard) {
-    calculationArr.push(Number(val), '-')
-    ttsText = `${val} minus` // Extra
-  } else if (calculationArr.length === 0) {
-    calculationArr.push(Number(val)) 
-    ttsText = val // Extra
+  // if (keyboard) {
+  //   calculationArr.push(num, '-')
+  //   ttsText = `${num} minus` // Extra
+  // } else
+
+  if (calculationArr.length === 0) {
+    calculationArr.push(num) 
+    ttsText = num // Extra
   } else {
-    calculationArr.push('-', Number(val))
-    ttsText = `minus ${val}` // Extra
+    calculationArr.push('-', num)
+    ttsText = `Minus ${num}.` // Extra
   }
 
   updateCalculationEl(calculationArr)
@@ -89,7 +97,7 @@ function minus (_, keyboard = false) {
 }
 
 /**
- * @param {Array<string | number>} arr 
+ * @param {Array<string | number>} arr
  */
 function simpleCalc (arr) {
   let res = arr[0]
@@ -114,11 +122,11 @@ function simpleCalc (arr) {
 
   resultEl.innerText = res
 
-  runTts(`equals ${res}`, true) // Extra
+  runTts(`Equals ${res}.`, true) // Extra
 }
 
 /**
- * @param {Array<string | number>} arr 
+ * @param {Array<string | number>} arr
  */
 function updateCalculationEl (arr) {
   resultEl.innerText = ''
@@ -130,7 +138,7 @@ $('body').on('keydown', onKeyboard)
 
 /**
  * @this {HTMLInputElement}
- * @param {KeyboardEvent} ev 
+ * @param {KeyboardEvent} ev
  */
 function onKeyboard (ev) {
   input.trigger('focus')
@@ -138,17 +146,14 @@ function onKeyboard (ev) {
     case '+':
       plus(null, true)
       ev.preventDefault()
-      input[0].value = ''
       break
     case '-':
       minus(null, true)
       ev.preventDefault()
-      input[0].value = ''
       break
     case '=':
       formSubmit(ev)
       ev.preventDefault()
-      input[0].value = ''
       break
   }
 }
