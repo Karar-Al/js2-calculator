@@ -19,8 +19,10 @@ function formSubmit (ev) {
   ev.preventDefault() // Refresha inte sidan.
 
   if (input[0].value.length > 0) {
-    calculationArr.push(Number(input[0].value))
+    const num = Number(input[0].value)
+    calculationArr.push(num)
     input[0].value = ''
+    runTts(num) // Extra
   }
 
   if (calculationArr)
@@ -39,13 +41,24 @@ function formSubmit (ev) {
 function plus (_, keyboard = false) {
   const val = input[0].value
 
-  if (keyboard) calculationArr.push(Number(val), '+')
-  else if (calculationArr.length === 0) calculationArr.push(Number(val))
-  else calculationArr.push('+', Number(val))
+  let ttsText = ''
+
+  if (keyboard) {
+    calculationArr.push(Number(val), '+')
+    ttsText = `${val} plus` // Extra
+  } else if (calculationArr.length === 0) {
+    calculationArr.push(Number(val))
+    ttsText = val // Extra
+  } else {
+    calculationArr.push('+', Number(val))
+    ttsText = `plus ${val}` // Extra
+  }
 
   updateCalculationEl(calculationArr)
 
   input[0].value = ''
+
+  runTts(ttsText) // Extra
 }
 
 /**
@@ -55,13 +68,24 @@ function plus (_, keyboard = false) {
 function minus (_, keyboard = false) {
   const val = input[0].value
 
-  if (keyboard) calculationArr.push(Number(val), '-')
-  else if (calculationArr.length === 0) calculationArr.push(Number(val))
-  else calculationArr.push('-', Number(val))
+  let ttsText = ''
+
+  if (keyboard) {
+    calculationArr.push(Number(val), '-')
+    ttsText = `${val} minus` // Extra
+  } else if (calculationArr.length === 0) {
+    calculationArr.push(Number(val)) 
+    ttsText = val // Extra
+  } else {
+    calculationArr.push('-', Number(val))
+    ttsText = `minus ${val}` // Extra
+  }
 
   updateCalculationEl(calculationArr)
 
   input[0].value = ''
+
+  runTts(ttsText) // Extra
 }
 
 /**
@@ -89,6 +113,8 @@ function simpleCalc (arr) {
   }
 
   resultEl.innerText = res
+
+  runTts(`equals ${res}`, true) // Extra
 }
 
 /**
